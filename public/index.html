@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW Create a job</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@pipedrive/app-extensions-sdk@0/dist/index.umd.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <form id="deal-form">
+        <div class="container" id="form-container">
+            <!-- First Block -->
+            <div class="block">
+                <h2>Client details</h2>
+                <div class="form-group">
+                    <div class="fields">
+                        <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+                        <input type="text" id="second_name" name="second_name" placeholder="Last Name" required>
+                    </div>
+                    <input type="tel" id="phone" name="phone" placeholder="Phone" required>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <!-- Second Block -->
+            <div class="block">
+                <h2>Job details</h2>
+                <div class="form-group">
+                    <div class="fields">
+                        <select id="job_type" name="job_type" required>
+                            <option value="">Select Job Type</option>
+                            <option value="19">Repair</option>
+                            <option value="20">Installation</option>
+                            <option value="21">Maintenance</option>
+                        </select>
+                        <select id="job_source" name="job_source" required>
+                            <option value="">Select Job Source</option>
+                            <option value="22">Online</option>
+                            <option value="23">Referral</option>
+                            <option value="24">Advertisement</option>
+                        </select>
+                    </div>
+                    <textarea id="job_description" name="job_description" rows="4" placeholder="Job Description" required></textarea>
+                </div>
+            </div>
+            <!-- Third Block -->
+            <div class="block">
+                <h2>Service Location</h2>
+                <div class="form-group">
+                    <input type="text" id="address" name="address" placeholder="Address" required>
+                    <input type="text" id="city" name="city" placeholder="City" required>
+                    <input type="text" id="state" name="state" placeholder="State" required>
+                    <div class="fields">
+                        <input type="text" id="zip_code" name="zip_code" placeholder="Zip-code" required>
+                        <select id="area" name="area" required>
+                            <option value="">Select Area</option>
+                            <option value="15">North</option>
+                            <option value="16">South</option>
+                            <option value="17">East</option>
+                            <option value="18">West</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Fourth Block -->
+            <div class="block">
+                <h2>Scheduled</h2>
+                <div class="form-group">
+                    <input type="date" id="start_date" name="start_date" required>
+                    <div class="fields">
+                        <input type="time" id="start_time" name="start_time" required>
+                        <input type="time" id="end_time" name="end_time" required>
+                    </div>
+                    <select id="test_select" name="test_select" required>
+                        <option value="">Select Option</option>
+                        <option value="25">Option 1</option>
+                        <option value="26">Option 2</option>
+                        <option value="27">Option 3</option>
+                    </select>
+                </div>
+            </div>
+            <div class="contbtn">
+                <button type="submit" class="btn">Create job</button>
+            </div>
+        </div>
+    </form>
+    <div class="message" id="message">
+        <p>Job is created! <a href="#" id="deal-link" target="_blank">View Deal in Workiz</a></p>
+    </div>
+</body>
+</html>
+

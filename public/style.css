@@ -1,0 +1,88 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            overflow: hidden; 
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+            width: 90%; 
+            height: 100vh; 
+            background:#fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; 
+        }
+          
+        .fields {
+            display: flex;
+            white-space: nowrap;
+        }
+        .fields input[type="time"] {
+            width: 50%;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background: #fff;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .block {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn{
+            width: auto;
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+        }       
+        button:hover {
+            background-color: #d4a500;
+        }
+
+        .message {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+    
