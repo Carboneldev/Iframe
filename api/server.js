@@ -6,12 +6,9 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Настройка для сервировки статических файлов из папки "public"
-app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Маршрут для создания сделки
 app.post('/create-deal', async (req, res) => {
   const formData = req.body;
 
@@ -41,7 +38,6 @@ app.post('/create-deal', async (req, res) => {
   }
 });
 
-// Маршрут для обработки OAuth callback
 app.get('/pipedrive/callback', async (req, res) => {
   const { code } = req.query;
   if (!code) {
@@ -67,12 +63,10 @@ app.get('/pipedrive/callback', async (req, res) => {
   }
 });
 
-// Маршрут для корневого URL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
-// Запуск сервера
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
