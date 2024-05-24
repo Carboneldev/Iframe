@@ -12,16 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/create-deal",
+      "src": "/api/(.*)",
       "dest": "/api/server.js"
     },
     {
-      "src": "/pipedrive/callback",
-      "dest": "/api/server.js"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
