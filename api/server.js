@@ -1,9 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Настройка для сервировки статических файлов из папки "public"
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 
@@ -61,6 +65,11 @@ app.get('/pipedrive/callback', async (req, res) => {
     console.error('Error exchanging authorization code for access token:', error);
     res.status(500).send('An error occurred during the authorization process.');
   }
+});
+
+// Маршрут для корневого URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Запуск сервера
