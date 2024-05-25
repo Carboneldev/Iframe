@@ -4,49 +4,45 @@ const axios = require('axios');
 const qs = require('qs');
 const path = require('path');
 const bodyParser = require('body-parser');
+const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Маршрут для создания сделки в Pipedrive
-app.post('/create-deal', async (req, res) => {
-    const formData = req.body;
-
-    try {
-        const response = await axios.post(
-            `https://api.pipedrive.com/v1/deals?api_token=${process.env.PIPEDRIVE_API_TOKEN}`,
-            formData
-        );
-
-        if (response.data && response.data.data && response.data.data.id) {
-            res.status(200).json({
-                success: true,
-                dealId: response.data.data.id,
-            });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to create deal',
-            });
-        }
-    } catch (error) {
-        console.error('Error creating deal:', error);
-        res.status(500).json({
-            success: false,
-            message: 'An error occurred while creating the deal',
-        });
+// Подключение к базе данных и создание таблицы для токенов
+const db = new sqlite3.Database('./mydatabase.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+        console.error('Error opening database', err.message);
+    } else {
+        console.log('Connected to the SQLite database.');
+        createTokenTable();
     }
 });
 
-// Маршрут для обработки OAuth callback от Pipedrive
+// Создание таблицы tokens
+function createTokenTable() {
+    db.run(`CREATE TABLE IF NOT EXISTS tokens (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        access_token TEXT NOT NULL,
+        refresh_token TEXT,
+        expires_in INTEGER
+    )`, [], (err) => {
+        if (err) {
+            console.error('Error creating token table', err.message);
+        } else {
+            console.log('Token table created or already exists');
+        }
+    });
+}
+
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Обработка OAuth callback от Pipedrive
 app.get('/pipedrive/callback', async (req, res) => {
     const { code } = req.query;
     if (!code) {
         return res.status(400).send('No authorization code provided.');
     }
-
     try {
         const data = qs.stringify({
             grant_type: 'authorization_code',
@@ -55,33 +51,44 @@ app.get('/pipedrive/callback', async (req, res) => {
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET
         });
-
         const config = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         };
-
         const response = await axios.post('https://oauth.pipedrive.com/oauth/token', data, config);
-
-        const { access_token } = response.data;
+        const { access_token, refresh_token, expires_in } = response.data;
         console.log('Access Token:', access_token);
 
-        // Сохраните access_token в переменную окружения
-        process.env.ACCESS_TOKEN = access_token;
-
-        res.send('Authorization successful! You can close this tab.');
+        // Сохранение токена в базе данных
+        db.run(`INSERT INTO tokens (access_token, refresh_token, expires_in) VALUES (?, ?, ?)`, [access_token, refresh_token, expires_in], function(err) {
+            if (err) {
+                console.error('Error saving token:', err.message);
+                res.status(500).send('Failed to save token');
+            } else {
+                res.send('Authorization successful! You can close this tab.');
+            }
+        });
     } catch (error) {
         console.error('Error exchanging authorization code for access token:', error);
         res.status(500).send('An error occurred during the authorization process.');
     }
 });
 
-// Статическое предоставление файлов из папки public
+// Статическое предоставление файлов
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+});
+
+// Закрытие базы данных при завершении работы сервера
+process.on('SIGINT', () => {
+    db.close((err) => {
+        if (err) {
+            console.error(err.message);
+        }
+        console.log('Close the database connection.');
+        process.exit(0);
+    });
 });
