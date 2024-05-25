@@ -67,6 +67,9 @@ app.get('/pipedrive/callback', async (req, res) => {
         const { access_token } = response.data;
         console.log('Access Token:', access_token);
 
+        // Сохраните access_token в переменную окружения
+        process.env.ACCESS_TOKEN = access_token;
+
         res.send('Authorization successful! You can close this tab.');
     } catch (error) {
         console.error('Error exchanging authorization code for access token:', error);
