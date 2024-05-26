@@ -4,7 +4,10 @@ async function initializeSDK() {
   if (!identifier) {
       throw new Error("Missing custom UI identifier");
   }
-  const sdk = await new AppExtensionsSDK({ identifier }).initialize();
+  const sdk = await new AppExtensionsSDK({
+    identifier: identifier,
+    size: { width: 800, height: 600 } 
+}).initialize();
   console.log("SDK initialized", sdk);
   return sdk;
 }
