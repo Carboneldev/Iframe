@@ -4,10 +4,11 @@ async function initializeSDK() {
   if (!identifier) {
       throw new Error("Missing custom UI identifier");
   }
-  const sdk = await new AppExtensionsSDK({
-    identifier: identifier,
-    size: { width: 800, height: 600 } 
-}).initialize();
+  const sdk = await new AppExtensionsSDK({ identifier }).initialize();
+  
+  // Задаем размеры для iframe
+  sdk.resize({ width: '100%', height: '600px' });  // Вы можете адаптировать значения под ваш интерфейс
+
   console.log("SDK initialized", sdk);
   return sdk;
 }
