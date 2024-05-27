@@ -7,7 +7,7 @@ async function initializeSDK() {
     const sdk = await new AppExtensionsSDK({ identifier }).initialize();
     console.log("SDK initialized", sdk);
 
-    // Попытка изменить размер окна iframe с помощью SDK
+    // Убедитесь, что вы используете AppExtensionsSDK.Commands.RESIZE, если это доступно
     try {
         await sdk.execute(AppExtensionsSDK.Commands.RESIZE, { height: 600, width: 800 });
     } catch (error) {
