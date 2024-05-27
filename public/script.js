@@ -7,9 +7,10 @@ async function initializeSDK() {
   const sdk = await new AppExtensionsSDK({ identifier }).initialize();
   
   // Задаем размеры для iframe
-  await sdk.execute(Command.RESIZE, { width:800, height: 500 }); // Вы можете адаптировать значения под ваш интерфейс
-
+  
   console.log("SDK initialized", sdk);
+
+  await sdk.execute(Command.RESIZE, { height: 600, width: 800 });
   return sdk;
 }
 
