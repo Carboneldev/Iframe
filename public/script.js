@@ -1,21 +1,16 @@
-async function initializeSDK() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const identifier = urlParams.get("id");
-    if (!identifier) {
-        throw new Error("Missing custom UI identifier");
-    }
-    const sdk = await new AppExtensionsSDK({ identifier }).initialize();
-    console.log("SDK initialized", sdk);
-
-    // Убедитесь, что вы используете AppExtensionsSDK.Commands.RESIZE, если это доступно
-    try {
-        await sdk.execute(AppExtensionsSDK.Commands.RESIZE, { height: 600, width: 800 });
-    } catch (error) {
-        console.error("Error resizing iframe:", error);
-    }
-
-    return sdk;
-}
+document.addEventListener("DOMContentLoaded", function() {
+    (async function() {
+        const sdk = await new AppExtensionsSDK().initialize();
+        console.log("SDK initialized", sdk);
+        
+        try {
+            // Попробуйте изменить размер после инициализации, если начальная настройка размера не поддерживается
+            await sdk.execute(AppExtensionsSDK.Commands.RESIZE, { height: 500, width: 800 });
+        } catch (error) {
+            console.error("Error resizing iframe:", error);
+        }
+    })();
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
