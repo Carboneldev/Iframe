@@ -6,25 +6,25 @@ async function initializeSDK() {
     }
     const sdk = await new AppExtensionsSDK({ identifier }).initialize();
     console.log("SDK initialized", sdk);
-  
-    // Выполнение команды изменения размера (убедитесь, что SDK поддерживает эту функцию)
+
+    // Попытка изменить размер окна iframe с помощью SDK
     try {
-      await sdk.execute(Command.RESIZE, { height: 600, width: 800 });
+        await sdk.execute(AppExtensionsSDK.Commands.RESIZE, { height: 600, width: 800 });
     } catch (error) {
-      console.error("Error resizing iframe:", error);
+        console.error("Error resizing iframe:", error);
     }
-  
+
     return sdk;
-  }
-  
-  document.addEventListener("DOMContentLoaded", async () => {
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
     try {
         const sdk = await initializeSDK();
         console.log("SDK initialized:", sdk);
     } catch (error) {
         console.error("Error initializing SDK:", error);
     }
-  });
+});
   
   document.getElementById("deal-form").addEventListener("submit", async function (event) {
       event.preventDefault();
